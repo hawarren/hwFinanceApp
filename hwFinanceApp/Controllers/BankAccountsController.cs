@@ -32,6 +32,8 @@ namespace hwFinanceApp.Controllers
         public async Task<ActionResult<BankAccount>> GetBankAccount(int id)
         {
             var bankAccount = await _context.BankAccounts.FindAsync(id);
+            bankAccount.Transactions = _context.Transactions.Where(g => g.OwnerAccountId == id).ToList();
+            bankAccount.AccountBalance = bankAccount.Transactions.Select(h => h.ItemCost).Sum();
 
             if (bankAccount == null)
             {
@@ -40,19 +42,7 @@ namespace hwFinanceApp.Controllers
 
             return bankAccount;
         }
-        // GET: api/BankAccounts/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<double>> GetBankAccountBalance(int id)
-        {
-            var bankAccount = await _context.BankAccounts.FindAsync(id);
-
-            if (bankAccount == null)
-            {
-                return NotFound();
-            }
-
-            return bankAccount.AccountBalance;
-        }
+        
 
         // PUT: api/BankAccounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

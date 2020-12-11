@@ -86,7 +86,25 @@ namespace hwFinanceApp.Controllers
         {
             transaction.TransactionDate = DateTime.Now;
             _context.Transactions.Add(transaction);
-            await _context.SaveChangesAsync();
+
+            var bankAccount = await _context.BankAccounts.FindAsync(transaction.OwnerAccountId); //find the account this belongs to
+            if (bankAccount != null)
+            { 
+            bankAccount.Transactions = _context.Transactions.Where(g => g.OwnerAccountId == bankAccount.Id).ToList();
+            bankAccount.AccountBalance = bankAccount.Transactions.Select(h => h.ItemCost).Sum();
+            }
+
+            //_context.Entry(transaction).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {                   
+                                    throw;                
+            }
+           
 
             //return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
             return CreatedAtAction(nameof(GetTransaction), new { id = transaction.Id }, transaction);
