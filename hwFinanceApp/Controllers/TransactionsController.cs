@@ -27,6 +27,13 @@ namespace hwFinanceApp.Controllers
             return await _context.Transactions.ToListAsync();
         }
 
+        //// GET: api/Transactions
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<IEnumerable<Transaction>>> GetAccountTransactions(long id)
+        //{
+        //    return await _context.Transactions.Where( g => g.OwnerAccountId == id).ToListAsync();
+        //}
+
         // GET: api/Transactions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Transaction>> GetTransaction(long id)

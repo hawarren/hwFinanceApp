@@ -14,6 +14,7 @@ namespace hwFinanceApp.Models
         public string AccountDescription { get; set; }
         public int AccountType { get; set; }
         public int AccountOwnerId { get; set; }
+        public double AccountBalance { get; set; }
 
         public virtual ICollection<Transaction> Transactions { get; set; }
 
